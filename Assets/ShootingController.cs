@@ -4,21 +4,24 @@ public class ShootingController : MonoBehaviour
 {
     [Header("Objects")]
     [SerializeField] private Transform attackTransform;
-    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private GameObject projectilePrefab, RangeArea;
     private GameObject currentTarget;
-    //private Player player;
+    private PlayerBaseInfo _baseInfo;
 
     [Header("Options")]
-    [SerializeField] private float attackRange = 10f;
-    [SerializeField] private float attackInterval = 1f;
     [SerializeField] private float projectileSpeed = 10f;
-    private float lastAttackTime;
-    private float speedAttack;
+    private float _attackRange;
+    private float _attackInterval;
+    private float _lastAttackTime;
 
     private void Start()
     {
-        /*player = FindObjectOfType<Player>();
-        speedAttack = player.SpeedAttack;*/
+        RangeArea.transform.localScale = new Vector3(60, 60, 0);
+        _baseInfo = FindObjectOfType<PlayerBaseInfo>();
+        _attackRange = _baseInfo.RangeOfAttack;
+        _attackInterval = _baseInfo.AttackSpeed;
+        _baseInfo.AttackSpeedChanged += OnSpeedAttackChanged;
+        _baseInfo.RangeOfAttackChanged += OnRangeOfAttackChanged;
     }
 
     void Update()
@@ -35,20 +38,29 @@ public class ShootingController : MonoBehaviour
 
     GameObject FindNewTarget()
     {
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(attackTransform.position, attackRange);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(attackTransform.position, _attackRange);
+        GameObject closestTarget = null;
+        float closestDistance = Mathf.Infinity;
+
         foreach (Collider2D hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Enemy") && hitCollider.GetComponent<Enemy>().IsAlive())
             {
-                return hitCollider.gameObject;
+                float distanceToTarget = Vector2.Distance(attackTransform.position, hitCollider.transform.position);
+                if (distanceToTarget < closestDistance)
+                {
+                    closestTarget = hitCollider.gameObject;
+                    closestDistance = distanceToTarget;
+                }
             }
         }
-        return null;
+
+        return closestTarget;
     }
 
     void Attack(GameObject target)
     {
-        if (Time.time - lastAttackTime > attackInterval)
+        if (Time.time - _lastAttackTime > _attackInterval)
         {
             // Вычисляем направление к цели
             Vector3 targetDirection = target.transform.position - attackTransform.position;
@@ -59,18 +71,24 @@ public class ShootingController : MonoBehaviour
             Rigidbody2D projectileRigidbody = projectile.GetComponent<Rigidbody2D>();
             projectileRigidbody.velocity = targetDirection * projectileSpeed;
 
-            lastAttackTime = Time.time;
+            _lastAttackTime = Time.time;
         }
     }
 
-    public void SetAttackInterval()
+    private void OnSpeedAttackChanged(float newSpeed)
     {
-        attackInterval -= speedAttack;
+        _attackInterval = 1f / newSpeed;
+    }
+
+    private void OnRangeOfAttackChanged(float newRange)
+    {
+        _attackRange = newRange;
+        RangeArea.transform.localScale += new Vector3(10, 10, 0);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackTransform.position, attackRange);
+        Gizmos.DrawWireSphere(attackTransform.position, _attackRange);
     }
 }

@@ -1,29 +1,83 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Spawner : MonoBehaviour
 {
-    [Header("Objects")]
-    [SerializeField] private GameObject _enemyPrefab;
-    [SerializeField] private Transform[] _spawnEnemyPoint;
+    [SerializeField] private Text _waveText;
+    private int _waveValue = 1;
+    [SerializeField] private TimeWaveSlider _healthBar;
+    public ObjectPooler enemyPool;
+    public Transform[] spawnPoints;
+    public float spawnInterval = 2f;
+    public float minSpawnInterval = 0.1f;
+    public float intervalDecreaseRate = 0.1f;
+    public float intervalDecreaseTime = 10f;
 
-    [Header("Options")]
-    [SerializeField] private int _enemiesValue = 2;
+    private float spawnTimer;
+    private float currentInterval;
 
-    void Start()
+    private void Start()
     {
-        StartCoroutine(Spawn());
+        UpdateWaveText();
+
+        _healthBar.SetMaxHealth(intervalDecreaseTime);
+
+        currentInterval = spawnInterval;
     }
 
-    IEnumerator Spawn()
+    void Update()
     {
-        yield return new WaitForSeconds(5f);
-
-        for (int i = 0; i < _enemiesValue; i++)
+        spawnTimer -= Time.deltaTime;
+        if (spawnTimer <= 0)
         {
-            Instantiate(_enemyPrefab, _spawnEnemyPoint[Random.Range(0, _spawnEnemyPoint.Length)].position, Quaternion.identity);
+            spawnTimer = currentInterval;
+            SpawnEnemy();
         }
 
-        StartCoroutine(Spawn());
+        intervalDecreaseTime -= Time.deltaTime;
+        _healthBar.SetHealth(intervalDecreaseTime);
+
+        if (intervalDecreaseTime <= 0)
+        {
+            _waveValue++;
+            spawnInterval -= intervalDecreaseRate;
+            currentInterval = spawnInterval;
+            if (spawnInterval < minSpawnInterval)
+            {
+                spawnInterval = minSpawnInterval;
+                currentInterval = spawnInterval;
+            }
+            UpdateWaveText();
+            intervalDecreaseTime = 10f;
+        }
+    }
+
+    void SpawnEnemy()
+    {
+        int spawnIndex = Random.Range(0, spawnPoints.Length);
+        Transform spawnPoint = spawnPoints[spawnIndex];
+        GameObject enemy = enemyPool.GetPooledObject();
+        if (enemy != null)
+        {
+            Enemy enemyScript = enemy.GetComponent<Enemy>();
+            if (enemyScript != null)
+            {
+                enemyScript.UpdateHealth();
+            }
+
+            float randomX = Random.Range(-2f, 2f);
+            float randomY = Random.Range(-2f, 2f);
+            Vector3 randomOffset = new Vector3(randomX, randomY, 0f);
+            Vector3 spawnPosition = spawnPoint.position + randomOffset;
+
+            enemy.transform.position = spawnPosition;
+            enemy.transform.rotation = spawnPoint.rotation;
+            enemy.SetActive(true);
+        }
+    }
+
+    private void UpdateWaveText()
+    {
+        _waveText.text = " Wave " + _waveValue;
     }
 }
