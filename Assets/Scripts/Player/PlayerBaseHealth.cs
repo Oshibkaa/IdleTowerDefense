@@ -4,6 +4,7 @@ public class PlayerBaseHealth : MonoBehaviour
 {
 	[Header("Objects")]
 	[SerializeField] private SliderBar _sliderBar;
+	private UIManager _uiScript;
 
 	[Header("Options")]
 	[SerializeField] private int _maxHealth;
@@ -11,6 +12,8 @@ public class PlayerBaseHealth : MonoBehaviour
 
 	protected void Start()
 	{
+		_uiScript = GameObjectManager.instance.allObjects[1].GetComponent<UIManager>();
+
 		_currentHealth = _maxHealth;
 		_sliderBar.SetMaxValue(_maxHealth);
 	}
@@ -41,6 +44,7 @@ public class PlayerBaseHealth : MonoBehaviour
 	public void DisableObject()
 	{
 		gameObject.SetActive(false);
+		_uiScript.PauseGame();
 	}
 
 	public int CheckHealth

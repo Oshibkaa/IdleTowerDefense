@@ -6,6 +6,7 @@ public class UIManager : MonoBehaviour
 {
     [Header("Objects")]
     [SerializeField] private Text _moneyText, _damageText, _speedAttackText, _rangeOfAttackText, _healthText;
+    [SerializeField] private GameObject _gameRestartWindow;
     private PlayerBaseInfo _baseInfoScript;
     private PlayerBaseHealth _baseHealthScript;
     private int _money;
@@ -41,6 +42,17 @@ public class UIManager : MonoBehaviour
     public int CheckMoney()
     {
         return _money;
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        _gameRestartWindow.SetActive(true);
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f;
     }
 
     public void ReastartLevel()
