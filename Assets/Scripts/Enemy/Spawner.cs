@@ -6,16 +6,17 @@ public class Spawner : MonoBehaviour
 {
     [Header("Objects")]
     [SerializeField] private Text _waveText;
-    [SerializeField] private SliderBar _healthBar;
+    [SerializeField] private SliderBar _sliderBar;
     [SerializeField] private GameObject[] _enemyPrefab;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private ObjectPooler _objectPool;
+    private UIManager _uiScripts;
 
     [Header("Options")]
     [SerializeField] private float _spawnInterval = 2f;
     [SerializeField] private float _minSpawnInterval = 0.25f;
     [SerializeField] private float _intervalDecreaseRate = 0.25f;
-    [SerializeField] private float _intervalDecreaseTime = 10f;
+    [SerializeField] private float _intervalDecreaseTime = 15f;
     private float _spawnTimer;
     private float _currentInterval;
     private int _waveValue = 1;
@@ -24,7 +25,9 @@ public class Spawner : MonoBehaviour
     {
         UpdateWaveText();
 
-        _healthBar.SetMaxValue(_intervalDecreaseTime);
+        _uiScripts = GameObjectManager.instance.allObjects[1].GetComponent<UIManager>();
+
+        _sliderBar.SetMaxValue(_intervalDecreaseTime);
 
         _currentInterval = _spawnInterval;
 
@@ -40,7 +43,7 @@ public class Spawner : MonoBehaviour
         }
 
         _intervalDecreaseTime -= Time.deltaTime;
-        _healthBar.SetHealth(_intervalDecreaseTime);
+        _sliderBar.SetHealth(_intervalDecreaseTime);
 
         if (_intervalDecreaseTime <= 0)
         {
@@ -57,6 +60,15 @@ public class Spawner : MonoBehaviour
 
             UpdateWaveText();
 
+            EnemyStats.Health += 0.5f;
+            EnemyStats.Damage += 1;
+            if (EnemyStats.Speed < 5f)
+            {
+                EnemyStats.Speed += 0.1f;
+            }
+
+            _uiScripts.UpdateEnemyStatus();
+
             _intervalDecreaseTime = 15f;
         }
     }
@@ -66,10 +78,20 @@ public class Spawner : MonoBehaviour
         GameObject obj = _objectPool.GetObject();
         if (obj != null)
         {
-            EnemyHealth enemyScript = obj.GetComponent<EnemyHealth>();
-            if (enemyScript != null)
+            EnemyHealth enemyHealthScript = obj.GetComponent<EnemyHealth>();
+            EnemyMovement enemyMovementScript = obj.GetComponent<EnemyMovement>();
+            EnemyMeleeAttack enemyDamageScript = obj.GetComponent<EnemyMeleeAttack>();
+            if (enemyHealthScript != null)
             {
-                enemyScript.SetMaxHealthValue();
+                enemyHealthScript.SetMaxHealthValue();
+            }
+            if (enemyMovementScript != null)
+            {
+                enemyMovementScript.SetSpeedValue();
+            }
+            if (enemyDamageScript != null)
+            {
+                enemyDamageScript.SetDamageValue();
             }
 
             float randomX = Random.Range(-2f, 2f);

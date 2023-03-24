@@ -10,9 +10,10 @@ public class Bullet : MonoBehaviour
     private bool _isHit = false;
 
 
-    private void Start()
+    private void Awake()
     {
         _baseInfoScript = GameObjectManager.instance.allObjects[0].GetComponent<PlayerBaseInfo>();
+
         _baseInfoScript.DamageChanged += OnDamageAttackChanged;
         _damage = _baseInfoScript.Damage;
     }
@@ -37,5 +38,16 @@ public class Bullet : MonoBehaviour
     private void OnDamageAttackChanged(int newDamage)
     {
         _damage = newDamage;
+    }
+
+    private void OnEnable()
+    {
+        _baseInfoScript.DamageChanged += OnDamageAttackChanged;
+        _damage = _baseInfoScript.Damage;
+    }
+
+    private void OnDisable()
+    {
+        _baseInfoScript.DamageChanged -= OnDamageAttackChanged;
     }
 }

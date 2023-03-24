@@ -6,13 +6,14 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 _baseTransform;
 
     [Header("Options")]
-    [SerializeField] private float _speed = 0.5f;
-    [SerializeField] private float _stoppingDistance = 0.1f;
+    private float _speed;
+    private float _stoppingDistance = 0.25f;
     private bool hasReachedTarget = false;
 
-    private void Start()
+    private void Awake()
     {
         _baseTransform = new Vector3(0f, 2.5f, 0);
+        SetSpeedValue();
     }
 
     private void FixedUpdate()
@@ -30,5 +31,10 @@ public class EnemyMovement : MonoBehaviour
                 hasReachedTarget = true;
             }
         }
+    }
+
+    public void SetSpeedValue()
+    {
+        _speed = EnemyStats.Speed;
     }
 }

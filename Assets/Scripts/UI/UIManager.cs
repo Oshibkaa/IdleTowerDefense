@@ -6,6 +6,7 @@ public class UIManager : MonoBehaviour
 {
     [Header("Objects")]
     [SerializeField] private Text _moneyText, _damageText, _speedAttackText, _rangeOfAttackText, _healthText;
+    [SerializeField] private Text _enemyDamageText, _enemySpeedText, _enemyHealthText;
     [SerializeField] private GameObject _gameRestartWindow;
     private PlayerBaseInfo _baseInfoScript;
     private PlayerBaseHealth _baseHealthScript;
@@ -16,10 +17,11 @@ public class UIManager : MonoBehaviour
         _baseInfoScript = GameObjectManager.instance.allObjects[0].GetComponent<PlayerBaseInfo>();
         _baseHealthScript = GameObjectManager.instance.allObjects[0].GetComponent<PlayerBaseHealth>();
 
+        UpdatePlayerStatus();
+        UpdateEnemyStatus();
+
+        _money = 9;
         _moneyText.text = " $ " + _money;
-        _damageText.text = "" + _baseInfoScript.Damage;
-        _speedAttackText.text = "" + _baseInfoScript.AttackSpeed;
-        _rangeOfAttackText.text = "" + _baseInfoScript.RangeOfAttack;
         _healthText.text = _baseHealthScript.CheckHealth + "/1";
 
         _baseInfoScript.AttackSpeedChanged += OnSpeedAttackChanged;
@@ -62,16 +64,35 @@ public class UIManager : MonoBehaviour
 
     private void OnDamageChanged(int newDamage)
     {
-        _damageText.text = newDamage.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+        _damageText.text = "" + newDamage;
     }
 
     private void OnSpeedAttackChanged(float newSpeed)
     {
-        _speedAttackText.text = newSpeed.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+        _speedAttackText.text = FormatNumber(newSpeed);
     }
 
     private void OnRangeOfAttackChanged(float newRange)
     {
-        _rangeOfAttackText.text = newRange.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+        _rangeOfAttackText.text = FormatNumber(newRange);
+    }
+
+    public void UpdatePlayerStatus()
+    {
+        _damageText.text = "" + _baseInfoScript.Damage;
+        _speedAttackText.text = FormatNumber(_baseInfoScript.AttackSpeed);
+        _rangeOfAttackText.text = FormatNumber(_baseInfoScript.RangeOfAttack);
+    }
+
+    public void UpdateEnemyStatus()
+    {
+        _enemySpeedText.text = FormatNumber(EnemyStats.Speed);
+        _enemyDamageText.text = "" + EnemyStats.Damage;
+        _enemyHealthText.text = "" + EnemyStats.Health; 
+    }
+
+    public string FormatNumber(float number)
+    {
+        return number.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
     }
 }

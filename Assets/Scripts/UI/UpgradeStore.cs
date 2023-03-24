@@ -12,96 +12,74 @@ public class UpgradeStore : MonoBehaviour
 
     [Header("Options")]
     [SerializeField] private int _damageAttackPrice, _speedAttackPrice, _rangeOfAttackPrice;
+    [SerializeField] private Text _damageAttackText, _speedAttackText, _rangeOfAttackText;
     [SerializeField] private int _damageAttackValue;
     [SerializeField] private float _speedAttackValue;
     [SerializeField] private float _rangeOfAttackValue;
     private int _money;
-    private int _numberOfDamageUpgrades = 2;
-    private int _numberOfspeedAttackUpgrades = 2;
-    private int _numberOfrangeOfAttackUpgrades = 2;
 
     private void Start()
     {
         _baseInfoScript = GameObjectManager.instance.allObjects[0].GetComponent<PlayerBaseInfo>();
         _uiScript = GameObjectManager.instance.allObjects[1].GetComponent<UIManager>();
         _money = _uiScript.CheckMoney();
+        UpdateTextPrice();
     }
 
     public void BuyAttackDamage()
     {
-        UpdateGoldValue();
+        UpdateMoneyValue();
 
-        if (_numberOfDamageUpgrades > 0)
+        if (_money >= _damageAttackPrice)
         {
-            if (_money >= _damageAttackPrice)
-            {
-                _numberOfDamageUpgrades--;
-                _money -= _damageAttackPrice;
-                _uiScript.TakeMoney(_damageAttackPrice);
-                _baseInfoScript.Damage += _damageAttackValue;
+            _money -= _damageAttackPrice;
+            _uiScript.TakeMoney(_damageAttackPrice);
+            _baseInfoScript.Damage += _damageAttackValue;
 
-                UpdateUIButton();
-            }
+            _damageAttackPrice += 3;
+            UpdateTextPrice();
         }
     }
 
     public void BuyAttackSpeed()
     {
-        UpdateGoldValue();
+        UpdateMoneyValue();
 
-        if (_numberOfspeedAttackUpgrades > 0)
+        if (_money >= _speedAttackPrice)
         {
-            if (_money >= _speedAttackPrice)
-            {
-                _numberOfspeedAttackUpgrades--;
-                _money -= _speedAttackPrice;
-                _uiScript.TakeMoney(_speedAttackPrice);
-                _baseInfoScript.AttackSpeed += _speedAttackValue;
+            _money -= _speedAttackPrice;
+            _uiScript.TakeMoney(_speedAttackPrice);
+            _baseInfoScript.AttackSpeed += _speedAttackValue;
 
-                UpdateUIButton();
-            }
+            _speedAttackPrice += 3;
+            UpdateTextPrice();
         }
     }
 
     public void BuyRangeOfAttack()
     {
-        UpdateGoldValue();
+        UpdateMoneyValue();
 
-        if (_numberOfrangeOfAttackUpgrades > 0)
+        if (_money >= _rangeOfAttackPrice)
         {
-            if (_money >= _rangeOfAttackPrice)
-            {
-                _numberOfrangeOfAttackUpgrades--;
-                _money -= _rangeOfAttackPrice;
-                _uiScript.TakeMoney(_rangeOfAttackPrice);
-                _baseInfoScript.RangeOfAttack += _rangeOfAttackValue;
+            _money -= _rangeOfAttackPrice;
+            _uiScript.TakeMoney(_rangeOfAttackPrice);
+            _baseInfoScript.RangeOfAttack += _rangeOfAttackValue;
 
-                UpdateUIButton();
-            }
+            _rangeOfAttackPrice += 3;
+            UpdateTextPrice();
         }
     }
 
-    private void UpdateUIButton()
-    {
-        if (_numberOfDamageUpgrades <=  0)
-        {
-            _damageButton.interactable = false;
-            _damageButton.GetComponent<Image>().color = new Color(0, 0, 0);
-        }
-        if (_numberOfspeedAttackUpgrades <= 0)
-        {
-            _attackSpeedButton.interactable = false;
-            _attackSpeedButton.GetComponent<Image>().color = new Color(0, 0, 0);
-        }
-        if (_numberOfrangeOfAttackUpgrades <= 0)
-        {
-            _rangeOfAttackButton.interactable = false;
-            _rangeOfAttackButton.GetComponent<Image>().color = new Color(0, 0, 0);
-        }
-    }
-
-    private void UpdateGoldValue()
+    private void UpdateMoneyValue()
     {
         _money = _uiScript.CheckMoney();
+    }
+
+    private void UpdateTextPrice()
+    {
+        _damageAttackText.text = _damageAttackPrice + " $";
+        _speedAttackText.text = _speedAttackPrice + " $";
+        _rangeOfAttackText.text = _rangeOfAttackPrice + " $";
     }
 }

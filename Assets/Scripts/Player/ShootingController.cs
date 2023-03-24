@@ -95,6 +95,12 @@ public class ShootingController : MonoBehaviour
         _rangeArea.transform.localScale += new Vector3(1.0f, 1.0f, 0);
     }
 
+    private void OnDestroy()
+    {
+        _baseInfoScript.AttackSpeedChanged -= OnSpeedAttackChanged;
+        _baseInfoScript.RangeOfAttackChanged -= OnRangeOfAttackChanged;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

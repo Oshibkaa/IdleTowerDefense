@@ -1,15 +1,16 @@
+using System;
 using UnityEngine;
 
 public class PlayerBaseInfo : MonoBehaviour
 {
     [Header("Options")]
     [SerializeField] private int _damage = 1;
-    [SerializeField] private float _attackSpeed = 1f;
+    [SerializeField] private float _attackSpeed = 1.5f;
     [SerializeField] private float _rangeOfAttack = 1.5f;
 
-    public event System.Action<int> DamageChanged;
-    public event System.Action<float> AttackSpeedChanged;
-    public event System.Action<float> RangeOfAttackChanged;
+    public event Action<int> DamageChanged;
+    public event Action<float> AttackSpeedChanged;
+    public event Action<float> RangeOfAttackChanged;
 
     public int Damage
     {
@@ -17,10 +18,7 @@ public class PlayerBaseInfo : MonoBehaviour
         set
         {
             _damage = value;
-            if (DamageChanged != null)
-            {
-                DamageChanged(_damage);
-            }
+            DamageChanged?.Invoke(_damage);
         }
     }
 
@@ -30,10 +28,7 @@ public class PlayerBaseInfo : MonoBehaviour
         set
         {
             _attackSpeed = value;
-            if (AttackSpeedChanged != null)
-            {
-                AttackSpeedChanged(_attackSpeed);
-            }
+            AttackSpeedChanged?.Invoke(_attackSpeed);
         }
     }
 
@@ -43,10 +38,7 @@ public class PlayerBaseInfo : MonoBehaviour
         set
         {
             _rangeOfAttack = value;
-            if (RangeOfAttackChanged != null)
-            {
-                RangeOfAttackChanged(_rangeOfAttack);
-            }
+            RangeOfAttackChanged?.Invoke(_rangeOfAttack);
         }
     }
 }
