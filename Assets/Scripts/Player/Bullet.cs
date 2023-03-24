@@ -14,8 +14,7 @@ public class Bullet : MonoBehaviour
     {
         _baseInfoScript = GameObjectManager.instance.allObjects[0].GetComponent<PlayerBaseInfo>();
 
-        _baseInfoScript.DamageChanged += OnDamageAttackChanged;
-        _damage = _baseInfoScript.Damage;
+        OnEnable();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
