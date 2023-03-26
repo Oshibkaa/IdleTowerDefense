@@ -60,49 +60,52 @@ public class Spawner : MonoBehaviour
 
             UpdateWaveText();
 
-            EnemyStats.Health += 0.5f;
-            EnemyStats.Damage += 1;
+            EnemyStats.Health += 0.25f;
+            EnemyStats.Damage += 0.25f;
             if (EnemyStats.Speed < 5f)
             {
-                EnemyStats.Speed += 0.1f;
+                EnemyStats.Speed += 0.05f;
             }
 
             _uiScripts.UpdateEnemyStatus();
 
-            _intervalDecreaseTime = 15f;
+            _intervalDecreaseTime = 20f;
         }
     }
 
     void SpawnEnemy()
     {
-        GameObject obj = _objectPool.GetObject();
-        if (obj != null)
+        int numberOfEnemies = Random.Range(2, 5); // случайное количество врагов от 2 до 4
+        for (int i = 0; i < numberOfEnemies; i++)
         {
-            EnemyHealth enemyHealthScript = obj.GetComponent<EnemyHealth>();
-            EnemyMovement enemyMovementScript = obj.GetComponent<EnemyMovement>();
-            EnemyMeleeAttack enemyDamageScript = obj.GetComponent<EnemyMeleeAttack>();
-            if (enemyHealthScript != null)
+            GameObject obj = _objectPool.GetObject();
+            if (obj != null)
             {
-                enemyHealthScript.SetMaxHealthValue();
-            }
-            if (enemyMovementScript != null)
-            {
-                enemyMovementScript.SetSpeedValue();
-            }
-            if (enemyDamageScript != null)
-            {
-                enemyDamageScript.SetDamageValue();
-            }
+                EnemyHealth enemyHealthScript = obj.GetComponent<EnemyHealth>();
+                EnemyMovement enemyMovementScript = obj.GetComponent<EnemyMovement>();
+                EnemyMeleeAttack enemyDamageScript = obj.GetComponent<EnemyMeleeAttack>();
+                if (enemyHealthScript != null)
+                {
+                    enemyHealthScript.SetMaxHealthValue();
+                }
+                if (enemyMovementScript != null)
+                {
+                    enemyMovementScript.SetSpeedValue();
+                }
+                if (enemyDamageScript != null)
+                {
+                    enemyDamageScript.SetDamageValue();
+                }
 
-            float randomX = Random.Range(-2f, 2f);
-            float randomY = Random.Range(-2f, 2f);
-            Vector3 randomOffset = new Vector3(randomX, randomY, 0f);
-            Vector3 spawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position + randomOffset;
+                float randomX = Random.Range(-2f, 2f);
+                float randomY = Random.Range(-2f, 2f);
+                Vector3 randomOffset = new Vector3(randomX, randomY, 0f);
+                Vector3 spawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position + randomOffset;
 
-            obj.transform.position = spawnPosition;
-            obj.transform.rotation = Quaternion.identity;
+                obj.transform.position = spawnPosition;
 
-            obj.SetActive(true);
+                obj.SetActive(true);
+            }
         }
     }
 

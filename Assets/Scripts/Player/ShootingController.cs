@@ -92,7 +92,7 @@ public class ShootingController : MonoBehaviour
     private void OnRangeOfAttackChanged(float newRange)
     {
         _attackRange = newRange;
-        _rangeArea.transform.localScale += new Vector3(1.0f, 1.0f, 0);
+        _rangeArea.transform.localScale += new Vector3(0.1f, 0.1f, 0);
     }
 
     private void OnDestroy()

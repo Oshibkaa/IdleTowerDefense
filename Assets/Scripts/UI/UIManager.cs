@@ -60,6 +60,7 @@ public class UIManager : MonoBehaviour
     public void ReastartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        EnemyStats.ResetStats();
     }
 
     private void OnDamageChanged(int newDamage)

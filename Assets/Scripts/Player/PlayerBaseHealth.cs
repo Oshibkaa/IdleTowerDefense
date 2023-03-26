@@ -8,7 +8,7 @@ public class PlayerBaseHealth : MonoBehaviour
 
 	[Header("Options")]
 	[SerializeField] private int _maxHealth;
-	[SerializeField] private int _currentHealth;
+	[SerializeField] private float _currentHealth;
 
 	protected void Start()
 	{
@@ -18,7 +18,7 @@ public class PlayerBaseHealth : MonoBehaviour
 		_sliderBar.SetMaxValue(_maxHealth);
 	}
 
-	public void TakeDamage(int damage)
+	public void TakeDamage(float damage)
 	{
 		_currentHealth -= damage;
 
@@ -47,7 +47,7 @@ public class PlayerBaseHealth : MonoBehaviour
 		_uiScript.PauseGame();
 	}
 
-	public int CheckHealth
+	public float CheckHealth
 	{
 		get { return _currentHealth; }
 		protected set { _currentHealth = value; }

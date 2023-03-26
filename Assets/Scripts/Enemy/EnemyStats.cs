@@ -4,9 +4,16 @@ public static class EnemyStats
 {
     [Header("Options")]
     private static int _money = 1;
-    private static float _health = 3;
+    private static float _health = 1;
     private static float _speed = 0.25f;
-    private static int _damage = 1;
+    private static float _damage = 1;
+
+    public static void ResetStats()
+    {
+        _health = 1;
+        _speed = 0.25f;
+        _damage = 1;
+    }
 
     public static float Health
     {
@@ -14,7 +21,7 @@ public static class EnemyStats
         set { _health = value; }
     }
 
-    public static int Damage
+    public static float Damage
     {
         get { return _damage; }
         set { _damage = value; }

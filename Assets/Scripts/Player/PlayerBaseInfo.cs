@@ -5,8 +5,8 @@ public class PlayerBaseInfo : MonoBehaviour
 {
     [Header("Options")]
     [SerializeField] private int _damage = 1;
-    [SerializeField] private float _attackSpeed = 1.5f;
-    [SerializeField] private float _rangeOfAttack = 1.5f;
+    [SerializeField] private float _attackSpeed = 1f;
+    [SerializeField] private float _rangeOfAttack = 1f;
 
     public event Action<int> DamageChanged;
     public event Action<float> AttackSpeedChanged;

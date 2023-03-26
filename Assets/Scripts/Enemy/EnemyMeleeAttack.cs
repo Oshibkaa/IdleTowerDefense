@@ -6,7 +6,7 @@ public class EnemyMeleeAttack : MonoBehaviour
     private PlayerBaseHealth _playerBaseHealthScript;
 
     [Header("Options")]
-    private int _damage;
+    private float _damage;
 
     private void Awake()
     {

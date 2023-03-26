@@ -75,7 +75,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moneyTextPrefab: {fileID: 446378283851109394, guid: 3f409f692c620cc478989cfede9c523c, type: 3}
   _explosionParticle: {fileID: 1662750881627167259, guid: 845fdae79d41f264982c61d7004d2eec, type: 3}
-  _currentHealth: 3
+  _currentHealth: 1
 --- !u!61 &7421570735291555311
 BoxCollider2D:
   m_ObjectHideFlags: 0
