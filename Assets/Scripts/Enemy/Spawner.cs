@@ -20,6 +20,7 @@ public class Spawner : MonoBehaviour
     private float _spawnTimer;
     private float _currentInterval;
     private int _waveValue = 1;
+    private int _lowWaveValue = 1;
 
     private void Start()
     {
@@ -48,6 +49,7 @@ public class Spawner : MonoBehaviour
         if (_intervalDecreaseTime <= 0)
         {
             _waveValue++;
+            _lowWaveValue++;
 
             _spawnInterval -= _intervalDecreaseRate;
             _currentInterval = _spawnInterval;
@@ -59,17 +61,23 @@ public class Spawner : MonoBehaviour
             }
 
             UpdateWaveText();
+            LowWave();
 
             EnemyStats.Health += 0.25f;
-            EnemyStats.Damage += 0.25f;
-            if (EnemyStats.Speed < 5f)
-            {
-                EnemyStats.Speed += 0.05f;
-            }
+            EnemyStats.Damage += 0.10f;
 
             _uiScripts.UpdateEnemyStatus();
 
             _intervalDecreaseTime = 20f;
+        }
+    }
+
+    private void LowWave()
+    {
+        if (_lowWaveValue >= 25)
+        {
+            _lowWaveValue = 1;
+            _spawnInterval += 1f;
         }
     }
 

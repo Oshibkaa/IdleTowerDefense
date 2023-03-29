@@ -5,7 +5,7 @@ public static class EnemyStats
     [Header("Options")]
     private static int _money = 1;
     private static float _health = 1;
-    private static float _speed = 0.25f;
+    private static float _speed = 1f;
     private static float _damage = 1;
 
     public static void ResetStats()

@@ -18,9 +18,9 @@ public class TimeController : MonoBehaviour
     public void IncreaseTimeScale()
     {
         _timeScale += 1f;
-        if (_timeScale >= 1.5f)
+        if (_timeScale >= 4f)
         {
-            _timeScale = 1.5f;
+            _timeScale = 4f;
         }
         Time.timeScale = _timeScale;
         _timeText.text = "x" + _timeScale.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));

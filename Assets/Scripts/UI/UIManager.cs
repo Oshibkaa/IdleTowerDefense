@@ -88,8 +88,8 @@ public class UIManager : MonoBehaviour
     public void UpdateEnemyStatus()
     {
         _enemySpeedText.text = FormatNumber(EnemyStats.Speed);
-        _enemyDamageText.text = "" + EnemyStats.Damage;
-        _enemyHealthText.text = "" + EnemyStats.Health; 
+        _enemyDamageText.text = FormatNumber(EnemyStats.Damage);
+        _enemyHealthText.text = FormatNumber(EnemyStats.Health); 
     }
 
     public string FormatNumber(float number)

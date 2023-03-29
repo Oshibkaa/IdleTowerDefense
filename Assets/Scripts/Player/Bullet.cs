@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -28,6 +29,12 @@ public class Bullet : MonoBehaviour
         }
     }
 
+    IEnumerator TimerCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
+        Disabled();
+    }
+
     private void Disabled()
     {
         _isHit = false;
@@ -43,6 +50,7 @@ public class Bullet : MonoBehaviour
     {
         _baseInfoScript.DamageChanged += OnDamageAttackChanged;
         _damage = _baseInfoScript.Damage;
+        StartCoroutine(TimerCoroutine());
     }
 
     private void OnDisable()
